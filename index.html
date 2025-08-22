@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seguridad Informática</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            padding: 40px;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .slide.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .slide h2 {
+            font-size: 2.8em;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #ffd700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .slide h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: #87ceeb;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.3em;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .slide ul {
+            padding-left: 30px;
+        }
+
+        .slide-content {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .text-content {
+            flex: 1;
+            padding-right: 40px;
+        }
+
+        .image-content {
+            flex: 1;
+            text-align: center;
+        }
+
+        .slide-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .slide-image:hover {
+            transform: scale(1.05);
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1.2em;
+            backdrop-filter: blur(10px);
+        }
+
+        .pillar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .pillar-card {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .pillar-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .threat-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .threat-item {
+            background: rgba(255,0,0,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b6b;
+        }
+
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .control-card {
+            background: rgba(0,255,0,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .bibliography {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .bibliography p {
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            padding-left: 20px;
+            text-indent: -20px;
+        }
+
+        /* Slide específicas */
+        #slide1 {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #slide1 .subtitle {
+            font-size: 1.8em;
+            margin-top: 20px;
+            color: #87ceeb;
+        }
+
+        #slide1 .author {
+            font-size: 1.2em;
+            margin-top: 40px;
+            color: #ffd700;
+        }
+        /* Animations: subtle entrance for content when a slide becomes active */
+        .anim-in {
+            opacity: 0;
+            transform: translateY(18px) scale(0.995);
+            transition: opacity 420ms cubic-bezier(.2,.9,.3,1), transform 420ms cubic-bezier(.2,.9,.3,1);
+            will-change: opacity, transform;
+        }
+
+        .anim-in.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Small accent for nav buttons when slide appears */
+        .nav-btn.anim-in { transform: translateY(6px); }
+        .nav-btn.anim-in.visible { transform: translateY(0); }
+
+        /* Responsive adjustments */
+        svg { max-width: 100%; height: auto; }
+        .slide-image { max-height: 320px; }
+
+        @media (max-width: 900px) {
+            .slide { padding: 28px; }
+            .slide h1 { font-size: 2.4rem; }
+            .slide h2 { font-size: 1.8rem; }
+            .slide h3 { font-size: 1.2rem; }
+            .slide-content { flex-direction: column; gap: 18px; align-items: flex-start; }
+            .text-content { padding-right: 0; }
+            .image-content { text-align: center; }
+            .pillar-grid { grid-template-columns: repeat(2, 1fr); }
+            .threat-list { grid-template-columns: 1fr; }
+            .control-grid { grid-template-columns: 1fr; }
+            .navigation { bottom: 18px; gap: 10px; }
+            .nav-btn { padding: 12px 18px; font-size: 1rem; }
+            .slide-image { max-height: 260px; }
+        }
+
+        @media (max-width: 480px) {
+            body { overflow: auto; }
+            .presentation-container { padding: 12px; }
+            .slide { padding: 20px; }
+            .slide h1 { font-size: 1.8rem; }
+            .slide h2 { font-size: 1.4rem; }
+            .slide h3 { font-size: 1rem; }
+            .slide p, .slide li { font-size: 1rem; }
+            .slide-counter { top: 12px; right: 12px; font-size: 1rem; padding: 6px 10px; }
+            /* Make nav buttons compact and elegant on small screens */
+            .nav-btn { padding: 10px 12px; border-radius: 12px; font-size: 0.95rem; }
+            .presentation-container { padding-bottom: 90px; }
+            .navigation { bottom: 10px; gap: 12px; width: 320px; left: 50%; transform: translateX(-50%); display: flex; }
+            .nav-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 8px 22px rgba(0,0,0,0.35); backdrop-filter: blur(8px); flex: 1; text-align: center; }
+            .slide-image { max-height: 200px; }
+            .pillar-grid { grid-template-columns: 1fr; }
+            .author { font-size: 1rem; }
+        }
+
+
+        /* Respect reduced motion preference */
+        @media (prefers-reduced-motion: reduce) {
+            .slide, .anim-in, .nav-btn { transition: none !important; animation: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <main id="slides" class="presentation-container" role="main">
+        <div class="slide-counter" role="status" aria-live="polite" aria-atomic="true">
+            <span id="current-slide">1</span> / <span id="total-slides">8</span>
+        </div>
+
+        <!-- Diapositiva 1: Portada -->
+        <div class="slide active" id="slide1" role="region" aria-labelledby="slide1-title">
+            <h1 id="slide1-title">🔒 SEGURIDAD INFORMÁTICA</h1>
+            <div class="subtitle">Protección de la Información en la Era Digital</div>
+            <div style="margin: 40px 0;">
+                <svg width="200" height="200" viewBox="0 0 200 200" role="img" aria-labelledby="shieldTitle shieldDesc">
+                    <title id="shieldTitle">Escudo de seguridad</title>
+                    <desc id="shieldDesc">Ícono representando un escudo con una marca de verificación que simboliza protección.</desc>
+                    <defs>
+                        <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4ecdc4;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#44a08d;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M100 20 L160 50 L160 120 Q160 160 100 180 Q40 160 40 120 L40 50 Z" fill="url(#shieldGradient)" stroke="#fff" stroke-width="3"/>
+                    <path d="M70 90 L90 110 L130 70" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="author">Fundamentos y Mejores Prácticas</div>
+        </div>
+
+        <!-- Diapositiva 2: ¿Qué es la Seguridad Informática? -->
+    <div class="slide" id="slide2" role="region" aria-labelledby="slide2-title">
+            <div class="slide-content">
+                <div class="text-content">
+            <h2 id="slide2-title">¿Qué es la Seguridad Informática?</h2>
+                    <p>La <strong>seguridad informática</strong> es la disciplina que se encarga de proteger los sistemas de información, datos y recursos tecnológicos contra amenazas, vulnerabilidades y accesos no autorizados.</p>
+                    
+                    <h3>Objetivos principales:</h3>
+                    <ul>
+                        <li><strong>Proteger</strong> la información y los sistemas</li>
+                        <li><strong>Mantener</strong> la continuidad del negocio</li>
+                        <li><strong>Cumplir</strong> con regulaciones y normativas</li>
+                        <li><strong>Preservar</strong> la confianza de los usuarios</li>
+                    </ul>
+                </div>
+                <div class="image-content">
+                    <svg width="300" height="300" viewBox="0 0 300 300" role="img" aria-labelledby="computerTitle computerDesc">
+                        <title id="computerTitle">Monitor con escudo</title>
+                        <desc id="computerDesc">Ilustración de un monitor con un escudo en pantalla y ondas de protección alrededor.</desc>
+                        <defs>
+                            <radialGradient id="computerGradient" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" style="stop-color:#4facfe;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#00f2fe;stop-opacity:1" />
+                            </radialGradient>
+                        </defs>
+                        <!-- Monitor -->
+                        <rect x="50" y="80" width="200" height="120" rx="10" fill="url(#computerGradient)" stroke="#fff" stroke-width="2"/>
+                        <rect x="60" y="90" width="180" height="100" fill="#1a1a1a" rx="5"/>
+                        <!-- Escudo en pantalla -->
+                        <path d="M150 120 L180 135 L180 170 Q180 185 150 195 Q120 185 120 170 L120 135 Z" fill="#4ecdc4"/>
+                        <path d="M135 155 L145 165 L165 145" stroke="#fff" stroke-width="3" fill="none"/>
+                        <!-- Base -->
+                        <rect x="130" y="200" width="40" height="20" fill="#ccc"/>
+                        <rect x="100" y="220" width="100" height="10" fill="#999"/>
+                        <!-- Ondas de protección -->
+                        <circle cx="150" cy="150" r="80" fill="none" stroke="#4ecdc4" stroke-width="2" opacity="0.5"/>
+                        <circle cx="150" cy="150" r="100" fill="none" stroke="#4ecdc4" stroke-width="2" opacity="0.3"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diapositiva 3: Pilares de la información -->
+        <div class="slide" id="slide3" role="region" aria-labelledby="slide3-title">
+            <h2 id="slide3-title">Pilares de la Seguridad de la Información</h2>
+            <div class="pillar-grid">
+                <article class="pillar-card" role="article" aria-labelledby="pillar1-title">
+                    <svg width="80" height="80" viewBox="0 0 80 80" role="img" aria-labelledby="pillar1Title pillar1Desc">
+                        <title id="pillar1Title">Confidencialidad - icono</title>
+                        <desc id="pillar1Desc">Círculo con marca de verificación que representa la confidencialidad.</desc>
+                        <circle cx="40" cy="40" r="35" fill="#ff6b6b" opacity="0.8"/>
+                        <path d="M25 40 L35 50 L55 30" stroke="#fff" stroke-width="4" fill="none"/>
+                    </svg>
+                    <h3 id="pillar1-title">Confidencialidad</h3>
+                    <p>Garantiza que la información solo sea accesible por personas autorizadas. Protege datos sensibles mediante cifrado y controles de acceso.</p>
+                </article>
+                <article class="pillar-card" role="article" aria-labelledby="pillar2-title">
+                    <svg width="80" height="80" viewBox="0 0 80 80" role="img" aria-labelledby="pillar2Title pillar2Desc">
+                        <title id="pillar2Title">Integridad - icono</title>
+                        <desc id="pillar2Desc">Rectángulo y círculo que simbolizan integridad y consistencia de datos.</desc>
+                        <rect x="10" y="20" width="60" height="40" fill="#4ecdc4" opacity="0.8" rx="5"/>
+                        <circle cx="40" cy="40" r="15" fill="#fff"/>
+                        <rect x="35" y="35" width="10" height="10" fill="#4ecdc4"/>
+                    </svg>
+                    <h3 id="pillar2-title">Integridad</h3>
+                    <p>Asegura que los datos no sean alterados de manera no autorizada. Mantiene la precisión y completitud de la información.</p>
+                </article>
+                <article class="pillar-card" role="article" aria-labelledby="pillar3-title">
+                    <svg width="80" height="80" viewBox="0 0 80 80" role="img" aria-labelledby="pillar3Title pillar3Desc">
+                        <title id="pillar3Title">Disponibilidad - icono</title>
+                        <desc id="pillar3Desc">Icono que representa disponibilidad con un símbolo de información.</desc>
+                        <circle cx="40" cy="40" r="35" fill="#feca57" opacity="0.8"/>
+                        <rect x="35" y="25" width="10" height="30" fill="#fff"/>
+                        <circle cx="40" cy="20" r="5" fill="#fff"/>
+                    </svg>
+                    <h3 id="pillar3-title">Disponibilidad</h3>
+                    <p>Garantiza que los sistemas y datos estén accesibles cuando se necesiten. Previene interrupciones del servicio.</p>
+                </article>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <p><em>Estos tres pilares forman la base fundamental de cualquier estrategia de seguridad informática efectiva.</em></p>
+            </div>
+        </div>
+
+        <!-- Diapositiva 4: Vulnerabilidades y Amenazas -->
+        <div class="slide" id="slide4" role="region" aria-labelledby="slide4-title">
+            <h2 id="slide4-title">Vulnerabilidades y Amenazas</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+                <div>
+                    <h3>🔍 Vulnerabilidades Comunes</h3>
+                    <div class="threat-list">
+                        <div class="threat-item">
+                            <strong>Software desactualizado</strong>
+                            <p>Falta de parches de seguridad</p>
+                        </div>
+                        <div class="threat-item">
+                            <strong>Configuraciones débiles</strong>
+                            <p>Parámetros por defecto inseguros</p>
+                        </div>
+                        <div class="threat-item">
+                            <strong>Contraseñas débiles</strong>
+                            <p>Credenciales fáciles de adivinar</p>
+                        </div>
+                        <div class="threat-item">
+                            <strong>Falta de cifrado</strong>
+                            <p>Datos transmitidos sin protección</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3>⚡ Amenazas Principales</h3>
+                    <div class="threat-list">
+                        <div class="threat-item">
+                            <strong>Malware</strong>
+                            <p>Virus, ransomware, spyware</p>
+                        </div>
+                        <div class="threat-item">
+                            <strong>Ataques de phishing</strong>
+                            <p>Ingeniería social y engaño</p>
+                        </div>
+                        <div class="threat-item">
+                            <strong>Ataques DDoS</strong>
+                            <p>Saturación de servicios</p>
+                        </div>
+                        <div class="threat-item">
+                            <strong>Insider threats</strong>
+                            <p>Amenazas internas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                    <svg width="200" height="100" viewBox="0 0 200 100" role="img" aria-labelledby="dangerTitle dangerDesc">
+                        <title id="dangerTitle">Icono de peligro</title>
+                        <desc id="dangerDesc">Triángulo de advertencia y elementos que simbolizan amenazas y peligro.</desc>
+                    <defs>
+                        <linearGradient id="dangerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#ff416c;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#ff4757;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <polygon points="100,10 120,40 80,40" fill="url(#dangerGrad)"/>
+                    <rect x="95" y="45" width="10" height="25" fill="url(#dangerGrad)"/>
+                    <circle cx="100" cy="80" r="3" fill="url(#dangerGrad)"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Diapositiva 5: Estudio de riesgos -->
+        <div class="slide" id="slide5" role="region" aria-labelledby="slide5-title">
+            <h2 id="slide5-title">Estudio de Riesgos en Seguridad Informática</h2>
+            <div class="slide-content">
+                <div class="text-content">
+                    <h3>Proceso de Gestión de Riesgos</h3>
+                    <ul>
+                        <li><strong>1. Identificación:</strong> Detectar activos, amenazas y vulnerabilidades</li>
+                        <li><strong>2. Análisis:</strong> Evaluar probabilidad e impacto</li>
+                        <li><strong>3. Evaluación:</strong> Determinar el nivel de riesgo</li>
+                        <li><strong>4. Tratamiento:</strong> Implementar controles</li>
+                        <li><strong>5. Monitoreo:</strong> Seguimiento continuo</li>
+                    </ul>
+                    
+                    <h3>Fórmula del Riesgo</h3>
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; margin: 20px 0;">
+                        <p style="font-size: 1.5em; text-align: center;">
+                            <strong>Riesgo = Amenaza × Vulnerabilidad × Impacto</strong>
+                        </p>
+                    </div>
+                </div>
+                <div class="image-content">
+                        <svg width="300" height="250" viewBox="0 0 300 250" role="img" aria-labelledby="riskTitle riskDesc">
+                            <title id="riskTitle">Matriz de riesgo</title>
+                            <desc id="riskDesc">Matriz de riesgo con cuadrantes codificados por color y etiquetas de probabilidad e impacto.</desc>
+                        <!-- Matriz de riesgo -->
+                        <rect x="50" y="50" width="200" height="150" fill="rgba(255,255,255,0.1)" stroke="#fff" stroke-width="2"/>
+                        
+                        <!-- Cuadrantes de colores -->
+                        <rect x="50" y="50" width="100" height="75" fill="rgba(76, 175, 80, 0.7)"/>
+                        <rect x="150" y="50" width="100" height="75" fill="rgba(255, 193, 7, 0.7)"/>
+                        <rect x="50" y="125" width="100" height="75" fill="rgba(255, 152, 0, 0.7)"/>
+                        <rect x="150" y="125" width="100" height="75" fill="rgba(244, 67, 54, 0.7)"/>
+                        
+                        <!-- Etiquetas -->
+                        <text x="100" y="90" text-anchor="middle" fill="white" font-size="12" font-weight="bold">BAJO</text>
+                        <text x="200" y="90" text-anchor="middle" fill="white" font-size="12" font-weight="bold">MEDIO</text>
+                        <text x="100" y="165" text-anchor="middle" fill="white" font-size="12" font-weight="bold">MEDIO</text>
+                        <text x="200" y="165" text-anchor="middle" fill="white" font-size="12" font-weight="bold">ALTO</text>
+                        
+                        <!-- Ejes -->
+                        <text x="25" y="130" fill="white" font-size="12">PROBABILIDAD</text>
+                        <text x="150" y="220" text-anchor="middle" fill="white" font-size="12">IMPACTO</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diapositiva 6: Controles de Seguridad -->
+        <div class="slide" id="slide6" role="region" aria-labelledby="slide6-title">
+            <h2 id="slide6-title">Controles de Seguridad</h2>
+            <div class="control-grid">
+                <div class="control-card">
+                    <h3>🛡️ Controles Preventivos</h3>
+                    <ul>
+                        <li>Firewalls y sistemas de filtrado</li>
+                        <li>Control de acceso y autenticación</li>
+                        <li>Cifrado de datos</li>
+                        <li>Políticas de seguridad</li>
+                        <li>Capacitación del personal</li>
+                    </ul>
+                </div>
+                <div class="control-card">
+                    <h3>🔍 Controles Detectivos</h3>
+                    <ul>
+                        <li>Sistemas de detección de intrusos (IDS)</li>
+                        <li>Monitoreo de logs y eventos</li>
+                        <li>Análisis de vulnerabilidades</li>
+                        <li>Auditorías de seguridad</li>
+                        <li>Alertas automatizadas</li>
+                    </ul>
+                </div>
+                <div class="control-card">
+                    <h3>🔧 Controles Correctivos</h3>
+                    <ul>
+                        <li>Planes de respuesta a incidentes</li>
+                        <li>Sistemas de backup y recuperación</li>
+                        <li>Parches y actualizaciones</li>
+                        <li>Aislamiento de sistemas comprometidos</li>
+                        <li>Restauración de servicios</li>
+                    </ul>
+                </div>
+                <div class="control-card">
+                    <h3>📋 Controles Administrativos</h3>
+                    <ul>
+                        <li>Políticas y procedimientos</li>
+                        <li>Clasificación de información</li>
+                        <li>Gestión de usuarios y privilegios</li>
+                        <li>Evaluaciones de riesgo</li>
+                        <li>Cumplimiento normativo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diapositiva 7: Conclusiones -->
+        <div class="slide" id="slide7" role="region" aria-labelledby="slide7-title">
+            <h2 id="slide7-title">Conclusiones</h2>
+            <div class="slide-content">
+                <div class="text-content">
+                    <div style="background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px;">
+                        <h3>Puntos Clave:</h3>
+                        <ul>
+                            <li><strong>La seguridad informática es fundamental</strong> en la era digital para proteger activos críticos</li>
+                            <li><strong>Los pilares CIA</strong> (Confidencialidad, Integridad, Disponibilidad) son la base de toda estrategia</li>
+                            <li><strong>La gestión de riesgos</strong> debe ser un proceso continuo y sistemático</li>
+                            <li><strong>La implementación de controles múltiples</strong> proporciona defensa en profundidad</li>
+                            <li><strong>La capacitación y concienciación</strong> del personal es crucial para el éxito</li>
+                        </ul>
+                        
+                        <div style="margin-top: 30px; padding: 20px; background: rgba(76, 175, 80, 0.2); border-radius: 10px;">
+                            <p style="font-size: 1.4em; text-align: center; font-weight: bold;">
+                                "La seguridad no es un producto, sino un proceso continuo"
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-content">
+                    <svg width="250" height="250" viewBox="0 0 250 250" role="img" aria-labelledby="successTitle successDesc">
+                        <title id="successTitle">Icono de éxito</title>
+                        <desc id="successDesc">Círculo con marca de verificación que representa éxito y buenas prácticas de seguridad.</desc>
+                        <defs>
+                            <radialGradient id="successGrad" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" style="stop-color:#4ecdc4;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#44a08d;stop-opacity:1" />
+                            </radialGradient>
+                        </defs>
+                        <circle cx="125" cy="125" r="100" fill="url(#successGrad)" opacity="0.8"/>
+                        <path d="M75 125 L110 160 L175 95" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diapositiva 8: Bibliografía -->
+        <div class="slide" id="slide8" role="region" aria-labelledby="slide8-title">
+            <h2 id="slide8-title">Bibliografía</h2>
+            <div class="bibliography">
+                <p>• NIST Cybersecurity Framework. (2018). <em>Framework for Improving Critical Infrastructure Cybersecurity</em>. National Institute of Standards and Technology.</p>
+                
+                <p>• ISO/IEC 27001:2013. <em>Information technology — Security techniques — Information security management systems — Requirements</em>. International Organization for Standardization.</p>
+                
+                <p>• Stallings, W. & Brown, L. (2018). <em>Computer Security: Principles and Practice</em>. 4th Edition. Pearson Education.</p>
+                
+                <p>• SANS Institute. (2020). <em>The Critical Security Controls for Effective Cyber Defense</em>. Version 8.0.</p>
+                
+                <p>• Whitman, M. E. & Mattord, H. J. (2019). <em>Principles of Information Security</em>. 6th Edition. Cengage Learning.</p>
+                
+                <p>• OWASP Foundation. (2021). <em>OWASP Top Ten Web Application Security Risks</em>. Open Web Application Security Project.</p>
+                
+                <p>• Pfleeger, C. P., Pfleeger, S. L. & Margulies, J. (2015). <em>Security in Computing</em>. 5th Edition. Prentice Hall.</p>
+            </div>
+            
+            <div style="text-align: center; margin-top: 40px;">
+                <p style="font-size: 1.5em; color: #ffd700;">¡Gracias por su atención!</p>
+                <p style="font-size: 1.2em; margin-top: 20px;">¿Preguntas?</p>
+            </div>
+        </div>
+
+        <!-- Navegación -->
+        <nav class="navigation" role="navigation" aria-label="Navegación de diapositivas">
+            <button class="nav-btn" onclick="previousSlide()" aria-label="Anterior">← Anterior</button>
+            <button class="nav-btn" onclick="nextSlide()" aria-label="Siguiente">Siguiente →</button>
+        </nav>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 8;
+        
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.slide');
+
+            if (n > totalSlides) currentSlide = 1;
+            if (n < 1) currentSlide = totalSlides;
+
+            slides.forEach(slide => {
+                slide.classList.remove('active');
+                // reset animated children
+                slide.querySelectorAll('.anim-in').forEach(el => el.classList.remove('visible'));
+            });
+
+            setTimeout(() => {
+                const active = slides[currentSlide - 1];
+                active.classList.add('active');
+                document.getElementById('current-slide').textContent = currentSlide;
+
+                // find important children to animate (headings, lists, images, nav)
+                const animated = active.querySelectorAll('h1, h2, h3, p, ul, .pillar-card, .threat-item, .control-card, .bibliography, .nav-btn');
+                // add anim-in to elements if not present
+                animated.forEach(el => el.classList.add('anim-in'));
+
+                // stagger revealing
+                Array.from(animated).forEach((el, i) => {
+                    setTimeout(() => el.classList.add('visible'), 80 * i);
+                });
+            }, 100);
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function previousSlide() {
+            currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Mostrar primera diapositiva
+        showSlide(1);
+    </script>
+</body>
+</html>
